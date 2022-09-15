@@ -14,8 +14,9 @@ import TransactionReversal from "./Pages/TransactionReversal";
 import CostChange from "./Components/CostChange";
 import GlAccount from "./Components/GLAccount";
 import GLCreation from "./Components/GLCreation";
-import FinanceInterface from "./Components/FinanaceInterface"
-import DailyView from "./Pages/Daily_view"
+import FinanceInterface from "./Components/FinanaceInterface";
+import DailyView from "./Pages/Daily_view";
+import SubLedgerCost from "./Pages/Subledger_cost";
 
 function Routing() {
   return (
@@ -37,6 +38,7 @@ function Routing() {
         <Route path="/ACCOUNT-CREATION" element={<GLCreation />} /> 
         <Route path="/Finance-Interface" element={<FinanceInterface />} />
         <Route path="/Stock-Ledger-View" element={<DailyView />} />
+        <Route path="/sub_Ledger_Cost" element={<SubLedgerCost />} />
       </Route>
     </Routes>
   );

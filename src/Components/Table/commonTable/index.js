@@ -141,7 +141,7 @@ const CommonTable = ({
   return (
     <>
       <Paper sx={{ maxWidth: "100%", maxHeight: "fit-content", mb: 2 }}>
-          {(pageName != "stage" && pageName != 'reconciliation' && pageName != 'inquiry') &&
+          {(pageName != "stage" && pageName != 'reconciliation' && pageName != 'inquiry' && pageName !='subledgercost') &&
         <TableToolbar selected={selected} handledelete={handleDelete} edithandle={handleEdit} seteditRows={seteditRows} setUpdateRow={setUpdateRow} setSelected={setSelected} editRows={editRows} setupdateData={setupdateData} setTabledata={setTabledata} allData={allData}/>
         } 
         <TableContainer sx={{ overflowX: "scroll", overflowY: "scroll",height: "fit-content", maxHeight: "70vh" }}>

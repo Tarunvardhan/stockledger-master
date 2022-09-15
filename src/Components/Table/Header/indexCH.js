@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
   SearchHead: {
     position: "sticky",
-    top: 0,
+    top: -1,
   }
 });
 

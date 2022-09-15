@@ -18,13 +18,13 @@ const useStyles = makeStyles({
   },
   SearchHead: {
     position: "sticky",
-    top: "33px",
+    top: "31px",
     background:'#fff',
   },
   TitleHead: {
     height: "25px",
     position: "sticky",
-    top: 0,
+    top: -1,
   }
 });
 

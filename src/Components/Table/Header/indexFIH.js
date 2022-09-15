@@ -14,17 +14,17 @@ const useStyles = makeStyles({
   TableCell: {
     color: "#fff",
     padding: "6px 6px !important",
-    lineHeight: "1.3rem !important",
+    lineHeight: "1.2rem !important",
   },
   SearchHead: {
     position: "sticky",
-    top: "33px",
+    top: "31px",
     background:'#fff',
   },
   TitleHead: {
     height: "25px",
     position: "sticky",
-    top: 0,
+    top: -1,
   }
 });
 

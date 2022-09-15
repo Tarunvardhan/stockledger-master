@@ -237,7 +237,7 @@ const CostChange = () => {
   useEffect(() => {
     if (isSubmit) {
       setTimeout(() => {
-         //console.log("194 SD", searchData)
+         ////console.log("194 SD", searchData)
         
         dispatch(getCostChangeRequest([searchData]))
       }, 1000)
@@ -279,7 +279,7 @@ const CostChange = () => {
       setSearch(false)
     }
   }, [CostChangeData?.data])
-  console.log("tabledata",tabledata,load)
+  //console.log("tabledata",tabledata,load)
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (value == "") {
@@ -305,7 +305,7 @@ const CostChange = () => {
     for (let i = 0; i < Object.values(updateRow).length; i++) {
       Object.values(updateRow)[i]["CREATE_ID"] = JSON.parse(localStorage.getItem("userData"))?.username;
     }
-    console.log("251 cc", Object.values(updateRow));
+    //console.log("251 cc", Object.values(updateRow));
     if (Object.keys(updateRow).length > 0) {
       let sendRow = Object.values(updateRow);
       sendRow.map((item) => {
@@ -314,7 +314,7 @@ const CostChange = () => {
         delete item?.LOCATION_NAME;
         delete item?.undefined;
       })
-      console.log("post:", sendRow);
+      //console.log("post:", sendRow);
       dispatch(postCostChangeRequest(sendRow));
       setLoading(true);
       setSubmit(true);
@@ -327,7 +327,7 @@ const CostChange = () => {
   };
   const handleSubmit = (event) => {
   var check=0;
-  console.log(searchData,inputH3)
+  //console.log(searchData,inputH3)
   if( input.length>0){
     for(var i = 0; i < UniqDept.length; i++) {
       check=1
@@ -448,15 +448,15 @@ if (check===1){
   }
 
   const handleSearchColumn = (e) => {
-    console.log(inputValue);
+    //console.log(inputValue);
     setFreeze(true);
   
   }
   
   const handleCopyDown = (e) => {
-    //console.log("Handle Copy Down",e);
-    //console.log("EditR",editRows);
-    //console.log("update",inputValue);
+    ////console.log("Handle Copy Down",e);
+    ////console.log("EditR",editRows);
+    ////console.log("update",inputValue);
   
     // Filter object by single key
     // const test = Object.keys(inputValue).
@@ -466,7 +466,7 @@ if (check===1){
     for(const key in inputValue){
         if(inputValue[key] === ''){
           delete inputValue[key];
-          console.log("k",key);
+          //console.log("k",key);
         }
         if(inputValue.hasOwnProperty('ITEM')){
           delete inputValue['ITEM'];
@@ -594,10 +594,10 @@ const handleHier2=(e,value) =>
   if(e===0){
     valH2.push(value);   
   }
-  console.log("filter",valH2)
+  //console.log("filter",valH2)
 //Filtering HIER2 based on HIER1
   if (valH2.length >0) {
-    console.log(1232)
+    //console.log(1232)
     const filterSubClass = itemData.filter((item) => {      
       return (valH2).some((val) => {
         return item.HIER2 === val.HIER2;
@@ -740,13 +740,13 @@ if (valItem.length >0) {
   });
 }
 }
-//console.log("searchData",searchData)
+////console.log("searchData",searchData)
 const selectLocation = (event, value) => {
   let selectedLocation = [];
   if (value.option) {     
         valLoc.push(value.option);
         // if (value.option.LOCATION===parseInt(inputLoc)){ 
-        //   console.log(1234)
+        //   //console.log(1234)
         //   setInputLoc("");
         // }
         if (String(value.option.LOCATION).includes(inputLoc)){

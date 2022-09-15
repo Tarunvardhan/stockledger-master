@@ -11,6 +11,7 @@ import {GlAccount,updateGlAccount,GLcurrency} from "./glaccountSaga";
 import {GlAccountcreation} from "./glaccountSagacreation";
 import {FinanceInterface} from "./FinanceInterfaceSaga";
 import { DailyView } from "./DailyViewSaga";
+import {SubLedgerCost} from "./subLedgerCostSaga";
 
 export function* rootSaga() {
   yield all([
@@ -41,5 +42,6 @@ export function* rootSaga() {
     fork(GlAccountcreation),
     fork(FinanceInterface),
     fork(DailyView),
+    fork(SubLedgerCost),
   ]);
 }
