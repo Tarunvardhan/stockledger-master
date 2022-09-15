@@ -1,0 +1,72 @@
+export const headCells = [
+  {
+    id: "TRN_NAME",
+    numeric: true,
+    disablePadding: false,
+    label: "TRN TYPE",
+    width: "100%",
+  },
+  {
+    id: "STCK_LDGR_APPL",
+    numeric: false,
+    disablePadding: false,
+    label: "STCK LDGR APPL",
+    width: "100%",
+  },
+  {
+    id: "SOH_IMPACT",
+    numeric: true,
+    disablePadding: false,
+    label: "SOH IMPACT",
+    width: "100%",
+  },
+  {
+    id: "COST_USED",
+    numeric: true,
+    disablePadding: false,
+    label: "COST USED",
+    width: "100%",
+  },
+  {
+    id: "PERIOD_INVT_TRAN",
+    numeric: false,
+    disablePadding: true,
+    label: "PERIOD INVT TRAN",
+    width: "100%",
+  },
+  {
+    id: "INJECT_PERIOD",
+    numeric: false,
+    disablePadding: true,
+    label: "INJECT PERIOD",
+    width: "100%",
+  },
+  {
+    id: "OVERRIDE_ACCUMULATE",
+    numeric: false,
+    disablePadding: true,
+    label: "OVERRIDE ACCUMULATE",
+    width: "100%",
+  },
+  {
+    id: "HIER_LEVEL",
+    numeric: false,
+    disablePadding: true,
+    label: "HIER LEVEL",
+    width: "100%",
+  },
+  {
+    id: "FIN_APPL",
+    numeric: false,
+    disablePadding: true,
+    label: "FIN APPL",
+    width: "100%",
+  },
+  {
+    id: "ACCT_REFERENCE",
+    numeric: false,
+    disablePadding: true,
+    label: "ACCT REFERENCE",
+    width: "100%",
+  }
+];
