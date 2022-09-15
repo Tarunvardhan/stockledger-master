@@ -106,7 +106,7 @@ export const GetItems = () => {
             },
           {
             id: 2,
-            name: "Sub Ledger Cost",
+            name: "SubLedger Cost",
             }, 
         ],
       },

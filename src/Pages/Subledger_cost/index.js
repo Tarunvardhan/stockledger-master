@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Grid from '@mui/material/Grid';
-import Table from "../../Components/Table/index";
+import Table from "../../Components/Table/indexFI";
 import MuiAlert, { AlertProps } from "@mui/material/Alert";
 import Drawer from "@mui/material/Drawer";
 import Stack from "@mui/material/Stack";
@@ -139,7 +139,7 @@ const SubLedgerCost = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    document.title = 'Sub Ledger Cost';
+    document.title = 'SubLedger Cost';
   },[]);
 
   const toggleDrawer = (anchor, open) => (event) => {

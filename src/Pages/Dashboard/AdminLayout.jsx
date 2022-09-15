@@ -165,7 +165,7 @@ export default function Index() {
     if (routeName === "Unit Cost Maintenance") {
       navigate("/Cost-Maintenance");
     }
-    if(routeName === "Sub Ledger Cost"){
+    if(routeName === "SubLedger Cost"){
       navigate("/sub_Ledger_Cost");
     }
     if (routeName === "Finance Interface Data") {

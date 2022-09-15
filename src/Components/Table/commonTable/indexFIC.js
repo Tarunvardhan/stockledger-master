@@ -137,13 +137,13 @@ const CommonTable = ({
 
   return (
     <>
-      <Paper sx={{ maxWidth: "fit-content", maxHeight: "fit-content", mb: 2 }}>
+      <Paper sx={{ maxWidth: "100%", maxHeight: "fit-content", mb: 2 }}>
       {(pageName != "stage") &&
         <TableToolbar selected={selected} handledelete={handleDelete} edithandle={handleEdit} seteditRows={seteditRows} setUpdateRow={setUpdateRow} setSelected={setSelected} editRows={editRows} setupdateData={setupdateData} setTabledata={setTabledata} allData={allData}/>
         } 
         <TableContainer sx={{ overflowX: "scroll", overflowY: "scroll",height: "fit-content", maxHeight: "70vh" }}>
           <Table
-            sx={{ minWidth: 750, maxWidth: "fit-content" }}
+            sx={{ maxWidth: "100%" }}
             aria-labelledby="tableTitle"
             size="small"
           >
