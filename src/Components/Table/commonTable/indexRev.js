@@ -61,6 +61,12 @@ const CommonTableRev = ({
   handleSearchClick,
   freeze,
   handleCopyDown,
+  tableData,
+  setAllData,
+  tabledataclone,
+  setInputValue,
+  inputValue,
+  setSearched,
 }) => {
 
 
@@ -162,7 +168,13 @@ const CommonTableRev = ({
               handleCopyDown={handleCopyDown}
               pageName={pageName}
               checkEditrows={true}
-            
+              tableData={tableData}
+              setTabledata={setTabledata}
+              setAllData={setAllData}
+              tabledataclone={tabledataclone}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              setSearched={setSearched}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))

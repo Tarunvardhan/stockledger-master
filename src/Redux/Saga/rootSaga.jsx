@@ -12,6 +12,7 @@ import {GlAccountcreation} from "./glaccountSagacreation";
 import {FinanceInterface} from "./FinanceInterfaceSaga";
 import { DailyView } from "./DailyViewSaga";
 import {SubLedgerCost} from "./subLedgerCostSaga";
+import {SysConfigcreation,GlPrimary} from "./SysConfigCreationSaga";
 
 export function* rootSaga() {
   yield all([
@@ -43,5 +44,7 @@ export function* rootSaga() {
     fork(FinanceInterface),
     fork(DailyView),
     fork(SubLedgerCost),
+    fork(SysConfigcreation),
+    fork(GlPrimary),
   ]);
 }

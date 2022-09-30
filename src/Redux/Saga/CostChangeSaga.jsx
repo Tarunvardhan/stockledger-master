@@ -25,6 +25,7 @@ function* fetchDataSaga(action) {
     yield put(getCostChangeError(e.message));
   }
 }
+console.log("response",getCostChangeError)
 
 export function* CostChange() {
   yield takeLatest(actions.GET_COSTCHANGE_REQUEST, fetchDataSaga);

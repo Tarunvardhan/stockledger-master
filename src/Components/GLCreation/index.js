@@ -18,8 +18,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import swal from '@sweetalert/with-react';
-import Select from 'react-select';
+// import Select from 'react-select';
+import Select from '@mui/material/Select';
 import makeAnimated from 'react-select/animated';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 
 
 const animatedComponents = makeAnimated();
@@ -29,10 +33,11 @@ const styleSelect = {
     border: 0,
     margin: "10px 0px 0px 10px",
     width:"310px",
+    height:"55px",
     //border: "5px solid black",
     // This line disable the blue border
     boxShadow: 'none',
-    borderBottom: "1px solid black"
+    border: "1px solid lightgray"
   })
 };
 
@@ -118,7 +123,7 @@ const Forms = () => {
     
     const [inputCurr, setInputCurr] = useState("");
     const [load, setLoad] = useState(0);
-    const [itemData, setItemData] = useState(initialItemData);
+    const [itemData, setItemData] = useState([{}]);
     const [filterClass, setFilterClass] = useState([]);
     const [searchData, setSearchData] = useState(initialsearch);
     const [origItemData, setOrigItemData] = useState({});
@@ -129,6 +134,7 @@ const Forms = () => {
     const theme = useTheme();
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false);
+    const [isValid, setIsValid] = useState(false);
     const [valCurr,setValCurr]=useState([]);
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
     const GlAccountData = useSelector(
@@ -205,9 +211,9 @@ const Forms = () => {
         }
       }, [GlAccountData])
     
-
+      console.log("sendData:", sendData)
     const onChange = (sendData) => {
-        //console.log("at", sendData)
+        console.log("at", sendData)
         setSendData((prev) => {
             return {
                 ...prev,
@@ -255,30 +261,52 @@ const Forms = () => {
     //    // //console.log(itemData)
     //      Alert("stop") 
     //   };
+// console.log("itemData",itemData)
 
-    const selectCurrency=(value)=>{
-        //console.log("asda",value)
+    // const selectCurrency=(value)=>{
+    //     //console.log("asda",value)
         
-        if((value.CURRENCY).length>0){
-            //console.log("asdasds",value.CURRENCY)
-            setSearchData((prev) => {
-              return {
-                ...prev,
-                CURRENCY : value.CURRENCY,
-              };
-            });
-          }else {
-            initialsearch.CURRENCY = "";
-            setSearchData((prev) => {
-              return {
-                ...prev,
-                CURRENCY : [],
-              };
-            });
-          }
+    //     if((value.CURRENCY).length>0){
+    //         //console.log("asdasds",value.CURRENCY)
+    //         setSearchData((prev) => {
+    //           return {
+    //             ...prev,
+    //             CURRENCY : value.CURRENCY,
+    //           };
+    //         });
+    //       }else {
+    //         initialsearch.CURRENCY = "";
+    //         setSearchData((prev) => {
+    //           return {
+    //             ...prev,
+    //             CURRENCY : [],
+    //           };
+    //         });
+    //       }
           
+    // }
+    const selectCurrency = (val) => {
+        console.log("value,e",val)
+        if(val){
+            setSendData((prev) => {
+            return {
+              ...prev,
+              CURRENCY : val.target.value,
+            };
+          });
+        //   setSearchData(sendData.CURRENCY)
+        }
+        else{
+            setSendData((prev) => {
+                return {
+                  ...prev,
+                  CURRENCY : "",
+                };
+              });
+            //   setSearchData(sendData.CURRENCY)
+        }
     }
-    //console.log("Sds",searchData)
+    // console.log("searchData",searchData)
     const selectCurrency2 = (event, value) => {
         //console.log("2343",value)
         let selectedCurrency = [];
@@ -369,7 +397,7 @@ const handleClickOpen = () => {
                 <Grid item xs={12}>
                     <Box className={GLCreateClasses.boxDiv}>
                         <div className={GLCreateClasses.uploaddiv}>
-                            <h4>GL Account</h4>
+                            <h4>Account Creation</h4>
                         </div>
                         <div className={GLCreateClasses.uploaddiv}>
                             {/* <div style={{ marginLeft: '16px', padding: '16px' }}> */}
@@ -411,31 +439,34 @@ const handleClickOpen = () => {
             </Grid>
             <div className="container">
                 {/* <h4 className="title">GL Account</h4> */}
-                <div className="form-container">
-
-                    <Box
-
+                <div className="form-container" sx={{display: "flex",flexDirection: "column"}}>
+                    {/* <Box
                         sx={{
                             '& .MuiTextField-root': { m: 1, width: '35ch' },
                         }}
-                        autoComplete="off"
-
-                    >
-                        <form>
+                        autoComplete="off"> */}
+                        {/* <form> */}
+                        <div sx={{display: "flex",flexDirection: "column"}}>  
+                        <Grid id="top-row" container spacing={0} >
+                        <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 error={validatePrimaryAccount}
                                 helperText={validatePrimaryAccount === true ? "*Required" : null}
                                 name="PRIMARY_ACCOUNT"
                                 label="PRIMARY ACCOUNT"
                                 id="PRIMARY ACCOUNT"
+                                // sx={{backgroundColor:"lightgreen",border:"1px solid black"}}
                                 onChange={onChange}
                                 required
                                 
                             //value={searchData.PRIMARY_ACCOUNT}
                             //{...register('PRIMARY ACCOUNT', { required: true })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
 
                             <TextField
+                            // variant="standard"
                                 error={validateSetOfBooksId}
                                 helperText={validateSetOfBooksId === true ? "*Required" : null}
                                 name="SET_OF_BOOKS_ID"
@@ -444,93 +475,120 @@ const handleClickOpen = () => {
                                 onChange={onChange}
                                 required
                             // {...register('SET OF BOOKS ID', { required: true })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
 
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT1"
                                 label="SEGMENT1"
                                 id="SEGMENT1"
                                 onChange={onChange}
 
                             //    {...register('SEGMENT1', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT2"
                                 label="SEGMENT2"
                                 id="SEGMENT2"
                                 onChange={onChange}
 
                             //   {...register('SEGMENT2', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT3"
                                 label="SEGMENT3"
                                 id="SEGMENT3"
                                 onChange={onChange}
 
                             //    {...register('SEGMENT3', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT4"
                                 label="SEGMENT4"
                                 id="SEGMENT4"
                                 onChange={onChange}
 
                             //   {...register('SEGMENT4', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT5"
                                 label="SEGMENT5"
                                 id="SEGMENT5"
                                 onChange={onChange}
 
                             //   {...register('SEGMENT5', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT6"
                                 label="SEGMENT6"
                                 id="SEGMENT6"
                                 onChange={onChange}
 
                             //   {...register('SEGMENT6', { required: false })}
-                            />
+                            /></Box>
+                            <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch',margin:"20px 0px 0px 20px"}}}>
                             <TextField
+                            // variant="standard"
                                 name="SEGMENT7"
                                 label="SEGMENT7"
                                 id="SEGMENT7"
                                 onChange={onChange}
 
                             //   {...register('SEGMENT7', { required: false })}
-                            />
-            <div style={{width: '320px'}}>              
-            {/* <Select 
-                closeMenuOnSelect={true}
-                className="basic-multi-select"
-                classNamePrefix="select"
-                getOptionLabel={option =>
-                  `${option.CURRENCY.toString()}`}
-                getOptionValue={option => option.CURRENCY}
-                options={itemData}
-                isSearchable={true}
-                onChange={selectCurrency(itemData)}
-                placeholder={"Choose a Currency"}
-                styles={styleSelect}
-                components={animatedComponents} 
-                //value={itemData.filter(obj => searchData?.CURRENCY.includes(obj.CURRENCY))}  
-                isMulti */}
-                <Select
-                        closeMenuOnSelect={true}
-                        className="basic-multi-select"
-                        classNamePrefix="select"
-                        getOptionLabel={option =>
-                            `${option.CURRENCY.toString()}`}
-                          getOptionValue={option => option.CURRENCY}
-                          options={itemData}
-                        isSearchable={true}
-                        onChange={selectCurrency}
-                        placeholder={'Choose a Currency'}
-                        styles={styleSelect}
-                /></div>  
+                            /></Box>
+                  
+                {/* <Grid id="top-row" container spacing={0} > */}
+                <Box sx={{'& .MuiTextField-root': { m: 0, width: '35ch'}}}>
+                        <FormControl>
+                        <InputLabel sx={{margin:"20px 0px 0px 20px"}}>CURRENCY
+                        </InputLabel>
+                            <Select 
+                            // labelId="demo-simple-select-standard-label"
+                            label="CURRENCY"
+                            value={sendData.CURRENCY}
+                            // options={searchData.PRIMARY_ACCOUNT}
+                            getOptionValue={(option) => option.CURRENCY}
+                            onChange={selectCurrency}
+                            sx={{width: "311px",margin:"20px 0px 0px 20px"}}
+                            MenuProps={{
+                                style: {
+                                maxHeight: 180,
+                                   },
+                             }}
+                            >
+                            {itemData.map((make, index) => (
+                                // console.log("make:",make,"index:",index),
+                                <MenuItem key={index} value={make.CURRENCY}>{make.CURRENCY}</MenuItem>
+                            ))}
+                            </Select>
+                             </FormControl>
+                             </Box>
+                            {/* <Select
+                                    closeMenuOnSelect={true}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                    getOptionLabel={option =>
+                                        `${option.CURRENCY.toString()}`}
+                                    getOptionValue={option => option.CURRENCY}
+                                    options={itemData}
+                                    isSearchable={true}
+                                    onChange={selectCurrency}
+                                    placeholder={'Choose a Currency'}
+                                    styles={styleSelect}
+                            /> */}
+                            {/* </Grid>  */}
+                            
 
                             <Grid item xs={6}>
                                 <Box display="flex"
@@ -540,11 +598,11 @@ const handleClickOpen = () => {
                                 </Box>
                             </Grid>
 
-
+                            </Grid></div>  
                             {/* <Button variant="contained" sx={{marginTop: '15px'}} type="Submit"    startIcon={<SendIcon />}>Submit</Button> */}
                             {/* </div> */}
-                        </form>
-                    </Box>
+                        {/* </form> */}
+                    {/* </Box> */}
 
                 </div>
             </div>

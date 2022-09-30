@@ -14,6 +14,7 @@ import { API } from "../../services/api";
 function* fetchDailyCountSaga(action) {
   try {
     const response = yield call(axiosCall, "GET", API.DAILYCOUNTDATA);
+    // console.log("axiosCall",axiosCall)
     if (response?.status == 200) {
       yield put(getDailyCountSuccess({ DailyCount: response?.data }));
     } else {

@@ -39,10 +39,31 @@ export default function EnhancedTableHead(props) {
     freeze,
     handleCopyDown,
     pageName,
+    tableData,
+    setAllData,
+    tabledataclone,
+    setInputValue,
+    setSearched,
+    setTabledata,
+    inputValue,
   } = props;
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+  const resetFilter = () => {
+    setSearched("");
+    setInputValue("");
+
+    if (inputValue.length===0){
+      // console.log("if:")
+    setTabledata(tableData);
+    setAllData(tableData);
+    }else{
+      // console.log("else:")
+    setTabledata(tabledataclone);
+    setAllData(tabledataclone);
+    }
+  }
 
   const headerclasses = useStyles();
   return (
@@ -107,7 +128,13 @@ export default function EnhancedTableHead(props) {
         </TableRow>
       </TableHead>
       <TableHead className={headerclasses.SearchHead}>
-        {/* <TableCell padding="checkbox"></TableCell> */}
+      <TableCell padding="checkbox">
+      <Grid item xs={1} style={{ padding: "0px",margin:"0px 0px 0px -5px" }}>
+            <IconButton className={headerclasses.resetfilter} onClick={resetFilter}>
+              <RestartAltIcon />
+            </IconButton>
+          </Grid>
+        </TableCell>
         {headCells.map((searchData, index) => (
           <>
             <TableCell className={headerclasses.TableCell}>

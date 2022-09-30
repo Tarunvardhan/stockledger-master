@@ -56,7 +56,14 @@ const CommonTable = ({
   allData,
   handleSearchClick,
   freeze,
+  setFreeze,
   handleCopyDown,
+  tableData,
+  setAllData,
+  tabledataclone,
+  setInputValue,
+  inputValue,
+  setSearched,
 }) => {
 
 
@@ -165,6 +172,15 @@ const CommonTable = ({
               checkEditrows={true}
               freeze={freeze}
               handleCopyDown={handleCopyDown}
+              tableData={tableData}
+              setTabledata={setTabledata}
+              setAllData={setAllData}
+              tabledataclone={tabledataclone}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              setSearched={setSearched}
+              setFreeze={setFreeze}
+              selected={selected}
               pageName={pageName}
             />
             <TableBody>
@@ -222,6 +238,12 @@ const CommonTable = ({
                               //console.log(editable);
                               }
                           }
+                        //   if(pageName == "cost_maintenance"){
+                        //     editable = true;
+                        //     if(key == "UNIT_COST"){
+                        //       editable = true
+                        //   }
+                        // }
                           if(pageName == "edit_Transaction"){
                             editable = false;
                           if(key == 'QTY'){

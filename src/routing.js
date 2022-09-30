@@ -17,6 +17,7 @@ import GLCreation from "./Components/GLCreation";
 import FinanceInterface from "./Components/FinanaceInterface";
 import DailyView from "./Pages/Daily_view";
 import SubLedgerCost from "./Pages/Subledger_cost";
+import SystemConfigCreation from "./Pages/systemConfig_Creation";
 
 function Routing() {
   return (
@@ -27,7 +28,7 @@ function Routing() {
         <Route path="/stage-processing" element={<StageProcessing />} />
         <Route path="/download" element={<Download />} />
         <Route path="/error-processing" element={<ErrorProcessing />} />
-        <Route path="/system-config" element={<SystemConfig />} />
+        <Route path="/system-config-maintenance" element={<SystemConfig />} />
         <Route path="/reconciliation" element={<Reconciliation />} />
         <Route path="/inquiry" element={<InquryScreen />} />
         <Route path="/noninventory/" element={<NonInventory />} />
@@ -39,6 +40,7 @@ function Routing() {
         <Route path="/Finance-Interface" element={<FinanceInterface />} />
         <Route path="/Stock-Ledger-View" element={<DailyView />} />
         <Route path="/sub_Ledger_Cost" element={<SubLedgerCost />} />
+        <Route path="/system-config-creation" element={<SystemConfigCreation />} />
       </Route>
     </Routes>
   );

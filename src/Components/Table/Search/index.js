@@ -17,8 +17,12 @@ const SearchTableData = ({
   onCopy,
   colEnabled,
   pageName,
+  selected,
 }) => {
-
+// console.log("name:",name,"value:",value,"pageName:",pageName,"freeze:",freeze,"selected:",selected)
+// console.log("value:",value)
+// console.log("pageName:",pageName)
+// console.log("freeze:",freeze)
   return (
     <div className="form-group">
       <div style={{display:'flex'}}>

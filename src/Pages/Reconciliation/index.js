@@ -150,6 +150,7 @@ const Reconciliation = () => {
   const [valLoc,setValLoc]=useState([]);
   const [freeze, setFreeze] = useState(false);
   const [valTrnType,setValTrnType]=useState([]);
+  const [tabledataclone, setTabledataclone] = useState("");
   const [load, setLoad] = useState(0);
   const [state, setState] = React.useState({
     top: false,
@@ -223,13 +224,14 @@ const Reconciliation = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter((props) =>
+      const filteredTable = tabledataclone.filter((props) =>
         Object.entries(inputValue).every(
           ([key, val]) =>
             !val.length ||
@@ -932,7 +934,7 @@ const selectLocation = (event, value) => {
                         <MenuItem value={2}>All Matched</MenuItem>
                         <MenuItem value={3}>All Unmatched</MenuItem>
                       </Select> */}
-                      <div style={{width: '100px'}}>
+                      <div style={{width: '160px'}}>
                       <Select
                         closeMenuOnSelect={true}
                         className="basic-multi-select"

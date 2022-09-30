@@ -4,7 +4,7 @@ export const headCells = [
     numeric: true,
     disablePadding: false,
     label: "ITEM",
-    width: "100%",
+    width: "100px",
   },
   {
     id: "ITEM_DESC",

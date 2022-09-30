@@ -149,6 +149,7 @@ const InquryScreen = () => {
   const [valTrnType,setValTrnType]=useState([]);
   const [freeze, setFreeze] = useState(false);
   const [load, setLoad] = useState(0);
+  const [tabledataclone, setTabledataclone] = useState("");
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -227,13 +228,14 @@ const InquryScreen = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter((props) =>
+      const filteredTable = tabledataclone.filter((props) =>
         Object.entries(inputValue).every(
           ([key, val]) =>
             !val.length ||
@@ -494,7 +496,7 @@ const InquryScreen = () => {
     setFreeze(true);
   
   }
-const handleHier1=(e,value) =>
+  const handleHier1=(e,value) =>
   {
     let selectedDept = [];
     if (value.option) {     
@@ -516,7 +518,32 @@ const handleHier1=(e,value) =>
       }
      valH1.splice(index,1);
     }else if(value.action==="clear"){ 
-        valH1.splice(0,valH1.length);
+        valH1.splice(0,valH1.length);        
+        valH2.splice(0,valH2.length);       
+        valH3.splice(0,valH3.length);       
+        valItem.splice(0,valItem.length);
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER2: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
+
     }
 //manual input handle input and filter itemdata
   if(e===0){
@@ -547,7 +574,7 @@ const handleHier1=(e,value) =>
               };
               
             });     
-      if(value.removedValue){
+      if(value.removedValue && searchData.HIER2.length>0){
         handleHier2("Filter",UniqClass)
       }
     }else {
@@ -563,14 +590,16 @@ const handleHier1=(e,value) =>
     }
 }
 const handleHier2=(e,value) =>
-  {
+  { let selectedHier2 = [];
     if (e==="Filter"){
        valH2.splice(0,valH2.length);
        valH2.push(...value);
     }
-    let selectedHier2 = [];
-    if (value){
+    
+
+    if (value && e!=="Filter"){
       if (value.option) {
+        //console.log(123)
         valH2.push(value.option)
         if ((value.option.HIER2).includes(inputH2)){
           setInputH2("");
@@ -589,6 +618,23 @@ const handleHier2=(e,value) =>
     
       }else if(value.action==="clear"){      
         valH2.splice(0,valH2.length);
+        valH3.splice(0,valH3.length);
+        valItem.splice(0,valItem.length);
+
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
       }
     }
 //manual input handle input and filter itemdata
@@ -598,7 +644,7 @@ const handleHier2=(e,value) =>
   //console.log("filter",valH2)
 //Filtering HIER2 based on HIER1
   if (valH2.length >0) {
-    //console.log(1232)
+    ////console.log(1232)
     const filterSubClass = itemData.filter((item) => {      
       return (valH2).some((val) => {
         return item.HIER2 === val.HIER2;
@@ -616,15 +662,43 @@ const handleHier2=(e,value) =>
           valH2.map((item) => {
             selectedHier2.push(item.HIER2);
           });
-          setSearchData((prev) => {
-            return {
-              ...prev,
-              HIER2: selectedHier2,
-            };
-          });    
-          if(e==="Filter" ||value.removedValue) {
+          //console.log("SH",selectedHier2)
+          if((e==="Filter" ||value.removedValue) && searchData.HIER3.length>0 ) {
+            //console.log(123)
             handleHier3("Filter",UniqClass)
-          }    
+          }
+          if(e!=="Filter" ){
+            setSearchData((prev) => {
+              return {
+                ...prev,
+                HIER2: selectedHier2,
+              };
+            });    
+          }  
+          var filter_rem1=selectedHier2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        searchData.HIER2)
+          
+          var filter_rem2=searchData.HIER2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        selectedHier2)
+        ////console.log("wew",elmts)
+        if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+          var temp=[];
+          filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+          //console.log("wew",temp)
+          for (var i = 0; i < temp.length; i++)
+          {//console.log("Afvsd")
+            const index =  searchData.HIER2.indexOf(temp[i]);
+            if (index > -1) {
+            searchData.HIER2.splice(index, 1);}
+            //console.log("searchData.HIER2",searchData.HIER2)
+          }
+        }
+     
+        
     }else {
       setsubFilterClass([]);
       setFilterItem([]);
@@ -636,6 +710,7 @@ const handleHier2=(e,value) =>
       });
   }
 }
+
 const handleHier3=(e,value) =>
   {
     if (e==="Filter"){
@@ -662,6 +737,14 @@ const handleHier3=(e,value) =>
     
     }else if(value.action==="clear"){      
       valH3.splice(0,valH3.length);
+      valItem.splice(0,valItem.length);
+      setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
     }
 //manual input handle input and filter itemdata
 if(e===0){
@@ -678,12 +761,36 @@ if(e===0){
             valH3.map((item) => {
               selectedHier3.push(item.HIER3);
             });
-            setSearchData((prev) => {
-              return {
-                ...prev,
-                HIER3: selectedHier3,
-              };
-            });            
+            if(e!=="Filter" ){
+              setSearchData((prev) => {
+                return {
+                  ...prev,
+                  HIER3: selectedHier3,
+                };
+              });    
+            }  
+            var filter_rem1=selectedHier3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          searchData.HIER3)
+            
+            var filter_rem2=searchData.HIER3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          selectedHier3)
+          ////console.log("wew",elmts)
+          if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+            var temp=[];
+            filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+            //console.log("wew",temp)
+            for (var i = 0; i < temp.length; i++)
+            {//console.log("Afvsd")
+              const index =  searchData.HIER3.indexOf(temp[i]);
+              if (index > -1) {
+              searchData.HIER3.splice(index, 1);}
+              //console.log("searchData.HIER3",searchData.HIER3)
+            }
+          }
       }else {
         setFilterItem([]);
         setSearchData((prev) => {

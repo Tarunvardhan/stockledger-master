@@ -76,7 +76,7 @@ const StageProcessing = () => {
   const [filterData, setFilterData] = useState("");
   const [isValidExcel, setIsValidExcel] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState("");
   const [allData, setAllData] = useState("");
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -85,6 +85,7 @@ const StageProcessing = () => {
   const [searched, setSearched] = useState();
   const [errmsg, setErrormsg] = useState("");
   const [freeze, setFreeze] = useState(false);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const StageProceesClasses = useStyles();
@@ -100,14 +101,7 @@ const StageProcessing = () => {
   // Column Filter of table
   useEffect(() => {
     if (inputValue && freeze === false) {
-      //console.log(inputValue);
-      // const filteredTable = tabledata.filter((val) => Object.keys().map((item) => {
-      //     if(val[item] !== undefined && inputValue[item] !== undefined){
-      //         return val[item]?.toString().toLowerCase().includes(inputValue[item]?.toString().toLowerCase())   
-      //      }
-      //     })
-      // );
-      const filteredTable = tabledata.filter(props =>
+      const filteredTable = tabledataclone.filter(props =>
         Object
           .entries(inputValue)
           .every(([key, val]) =>
@@ -175,6 +169,21 @@ const StageProcessing = () => {
           item['TOTAL_RETAIL'] = (item['QTY'] * item['UNIT_RETAIL']).toFixed(4);
           count++;
         })
+        formatData.filter((val) => {
+          for (const [key, value] of Object.entries(val)) {
+            if(value==="NaN"){
+              val[key]=""
+            }
+          }
+      })
+      formatData.filter((val) => {
+        // console.log("vale","   ",val)
+        for (const [key, value] of Object.entries(val)) {
+          if(value==="NaN"){
+            val[key]=""
+          }
+        }
+    })
         setTabledata(serializedata(formatData));
         setAllData(serializedata(formatData));
       } else {
@@ -252,8 +261,8 @@ const StageProcessing = () => {
 
     });
     dispatch(getStageProcessingRequest(JSON.stringify(tabledata)));
-    setLoading(() => window.location.reload(), 500)
-    //setLoading(true);
+    //setLoading(() => window.location.reload(), 500)
+    setLoading(true);
     setOpen(false);
   }
 
@@ -346,12 +355,20 @@ const StageProcessing = () => {
     } else setTabledata(allData);
   }, [searched]);
 
-  const resetFilter = () => {
-    //console.log(deleteId);
-    setSearched("");
-    setInputValue("");
-    setTabledata(tabledata);
-  }
+  // const resetFilter = () => {
+  //   setSearched("");
+  //   setInputValue("");
+
+  //   if (inputValue.length===0){
+  //     // console.log("if:")
+  //   setTabledata(tabledata);
+  //   setAllData(tabledata);
+  //   }else{
+  //     // console.log("else:")
+  //   setTabledata(tabledataclone);
+  //   setAllData(tabledataclone);
+  //   }
+  // }
 
   const serializedata = (tabledata) => {
     let newTabledata = [];
@@ -384,6 +401,7 @@ const StageProcessing = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
@@ -449,6 +467,11 @@ const StageProcessing = () => {
             <Table
               tableData={tabledata}
               handleSearchClick={handleSearchColumn}
+              setTabledataclone={setTabledataclone}
+              tabledataclone={allData}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              setSearched={setSearched}
               //handleCopyDown={handleCopyDown}
               setTabledata={setTabledata}
               handleSearch={handleChange}
@@ -457,14 +480,15 @@ const StageProcessing = () => {
               setDeleteId={setDeleteId}
               deleteId={deleteId}
               freeze={freeze}
+              setAllData={setAllData}
               pageName="stage"
             />
           </Grid>
-          <Grid item xs={1} style={{ paddingLeft: "0px" }}>
+          {/* <Grid item xs={1} style={{ paddingLeft: "0px" }}>
             <IconButton className={StageProceesClasses.resetBtn} onClick={resetFilter}>
-              <RestartAltIcon />undo
+              <RestartAltIcon />
             </IconButton>
-          </Grid>
+          </Grid> */}
         </Grid>
       )}
       <Stack spacing={2} sx={{ width: "100%" }}>

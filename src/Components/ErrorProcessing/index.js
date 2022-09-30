@@ -39,6 +39,7 @@ import swal from '@sweetalert/with-react';
 import TrnTypeList from "../TRNTYPE";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { ConstructionOutlined } from "@mui/icons-material";
 //import "./index.css";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -120,7 +121,8 @@ const initialsearch = {
   TRN_TYPE: [],
   AREF: [],
   ERR_MSG: [],
-  CREATE_ID: JSON.parse(localStorage.getItem("userData"))?.username,
+  CREATE_ID:[],
+  // CREATE_ID: JSON.parse(localStorage.getItem("userData"))?.username,
   TRN_DATE: "",
   TRN_NAME:[]
 };
@@ -158,6 +160,7 @@ const ErrorProcessing = () => {
   const [loading, setLoading] = useState(false);
   const [isSearch, setSearch] = useState(false);
   const [searchData, setSearchData] = useState(initialsearch);
+  const [searched, setSearched] = useState();
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [freeze, setFreeze] = useState(false);
@@ -170,6 +173,7 @@ const ErrorProcessing = () => {
   const [valLoc,setValLoc]=useState([]);
   const [valTrnType,setValTrnType]=useState([]);
   const [valErr, setValErr] = useState([]);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const [load, setLoad] = useState(0);
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -183,7 +187,7 @@ const ErrorProcessing = () => {
   const ErrorProcessingData = useSelector(
     (state) => state.ErrorProcessingReducers
   );
-  ////console.log(ErrorProcessingData?.data?.Data);
+  //////console.log(ErrorProcessingData?.data?.Data);
   const dispatch = useDispatch();
 
   var trnTypeValue = TrnTypeList();
@@ -253,13 +257,14 @@ const ErrorProcessing = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter((props) =>
+      const filteredTable = tabledataclone.filter((props) =>
         Object.entries(inputValue).every(
           ([key, val]) =>
             !val.length ||
@@ -285,7 +290,7 @@ const ErrorProcessing = () => {
   // }, [ErrorProcessingData]);
 
   useEffect(() => {
-    //console.log("ErrorProcessingData",ErrorProcessingData)
+    ////console.log("ErrorProcessingData",ErrorProcessingData)
     if (ErrorProcessingData.isError) {
         setIsError(true)
         swal(
@@ -318,7 +323,7 @@ const ErrorProcessing = () => {
  
   useEffect(() => {
     if (isSearch) {
-      ////console.log("issearchData",searchData)
+      //////console.log("issearchData",searchData)
       dispatch(getErrorProcessingRequest([searchData]));
       setSearch(false)
     }
@@ -375,13 +380,16 @@ const ErrorProcessing = () => {
       }));
     }
   };
-////console.log("test",tabledata)
+//////console.log("test",tabledata)
   const confirmSubmit = () => {
     setOpen(true);
   };
+  const tableSearch = (event) => {
+    setSearched(event.target.value);
+  }
 
   const SubmitList = () => {
-    ////console.log(updateRow);
+    //////console.log(updateRow);
     if (Object.keys(updateRow).length > 0) {
       let sendRow = Object.values(updateRow);
       sendRow.map((item) => {
@@ -394,7 +402,7 @@ const ErrorProcessing = () => {
         delete item?.undefined;
         item['CREATE_ID'] = JSON.parse(localStorage.getItem("userData"))?.username;
       });
-      ////console.log("admin",sendRow);
+      //////console.log("admin",sendRow);
       setLoading(true);
       dispatch(postErrorProcessingRequest(sendRow));
       initialsearch.HIER1 = [];
@@ -495,12 +503,12 @@ const handleSubmit = (event) => {
       check=1;
     }
   }if ( inputTrn.length>0 && (check===0 || check===2)){
-    //console.log("inputTrn",inputTrn)
+    ////console.log("inputTrn",inputTrn)
     if(trnTypeValue.length>0){      
       for(var i = 0; i < trnTypeValue.length; i++) {  
         if (trnTypeValue[i].TRN_NAME.toUpperCase()=== inputTrn.toUpperCase()) {
            // selectLocation(0,locationData[i]);
-           //console.log("inputTrn4343",trnTypeValue[i].TRN_NAME)
+           ////console.log("inputTrn4343",trnTypeValue[i].TRN_NAME)
            selectTrantype(0,trnTypeValue[i])
             // searchData.TRN_NAME.push(trnTypeValue[i].TRN_NAME)
             // searchData.TRN_TYPE=trnTypeValue[i].TRN_TYPE
@@ -517,11 +525,11 @@ const handleSubmit = (event) => {
     }
   }
   if ( inputErr.length>0 && (check===0 || check===2)){
-    //console.log("inputErr323",inputErr)
+    ////console.log("inputErr323",inputErr)
     if(errorList.length>0){      
       for(var i = 0; i < errorList.length; i++) {  
         if (errorList[i].value.toUpperCase()=== inputErr.toUpperCase()) {
-          //console.log("inputErr",inputErr)
+          ////console.log("inputErr",inputErr)
           //searchData.ERR_MSG=errorList[i].value
             selectError(0,errorList[i].value);
             setInputErr("");
@@ -545,7 +553,7 @@ const handleSubmit = (event) => {
     setState({ ...state, 'right': open });
     setLoad(1)
   }else{ 
-    //console.log("hadnlesu else")
+    ////console.log("hadnlesu else")
       setLoad(0);
       event.preventDefault();
       setSearch(true);
@@ -564,15 +572,15 @@ const handleSubmit = (event) => {
   };
 
   const handleSearchColumn = (e) => {
-       ////console.log("Handle Search Column",e)
-       ////console.log(inputValue);
+       //////console.log("Handle Search Column",e)
+       //////console.log(inputValue);
        setFreeze(true);
 
   }
 
   const handleCopyDown = (e) => {
-       ////console.log("Handle Copy Down",e);
-       ////console.log("EditR",editRows);
+       //////console.log("Handle Copy Down",e);
+       //////console.log("EditR",editRows);
        setFreeze(false);
   }
 
@@ -608,7 +616,7 @@ const handleSubmit = (event) => {
     initialsearch.AREF = [];
     initialsearch.ERR_MSG = [];
     initialsearch.CREATE_ID = [];
-    ////console.log("datainitial", initialsearch);
+    //////console.log("datainitial", initialsearch);
     setSearchData(initialsearch);
     setLoad(0);
     setInput("");
@@ -625,12 +633,13 @@ const handleSubmit = (event) => {
     setValLoc([]);
     setValTrnType([]);
     setValErr([]);
+    seteditRows([]);
     //initialTRName.TRN_NAME=[];
     setFilterClass([]);
     setsubFilterClass([]);
     setFilterItem([]);
-
-    ////console.log("data", searchData);
+    setInputValue("");
+    //////console.log("data", searchData);
     setSearch(false);
     setTabledata("");
   };
@@ -656,7 +665,32 @@ const handleSubmit = (event) => {
       }
      valH1.splice(index,1);
     }else if(value.action==="clear"){ 
-        valH1.splice(0,valH1.length);
+        valH1.splice(0,valH1.length);        
+        valH2.splice(0,valH2.length);       
+        valH3.splice(0,valH3.length);       
+        valItem.splice(0,valItem.length);
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER2: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
+
     }
 //manual input handle input and filter itemdata
   if(e===0){
@@ -687,7 +721,7 @@ const handleSubmit = (event) => {
               };
               
             });     
-      if(value.removedValue){
+      if(value.removedValue && searchData.HIER2.length>0){
         handleHier2("Filter",UniqClass)
       }
     }else {
@@ -703,14 +737,16 @@ const handleSubmit = (event) => {
     }
 }
 const handleHier2=(e,value) =>
-  {
+  { let selectedHier2 = [];
     if (e==="Filter"){
        valH2.splice(0,valH2.length);
        valH2.push(...value);
     }
-    let selectedHier2 = [];
-    if (value){
+    
+
+    if (value && e!=="Filter"){
       if (value.option) {
+        //console.log(123)
         valH2.push(value.option)
         if ((value.option.HIER2).includes(inputH2)){
           setInputH2("");
@@ -729,6 +765,23 @@ const handleHier2=(e,value) =>
     
       }else if(value.action==="clear"){      
         valH2.splice(0,valH2.length);
+        valH3.splice(0,valH3.length);
+        valItem.splice(0,valItem.length);
+
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
       }
     }
 //manual input handle input and filter itemdata
@@ -738,7 +791,7 @@ const handleHier2=(e,value) =>
   //console.log("filter",valH2)
 //Filtering HIER2 based on HIER1
   if (valH2.length >0) {
-    //console.log(1232)
+    ////console.log(1232)
     const filterSubClass = itemData.filter((item) => {      
       return (valH2).some((val) => {
         return item.HIER2 === val.HIER2;
@@ -756,15 +809,43 @@ const handleHier2=(e,value) =>
           valH2.map((item) => {
             selectedHier2.push(item.HIER2);
           });
-          setSearchData((prev) => {
-            return {
-              ...prev,
-              HIER2: selectedHier2,
-            };
-          });    
-          if(e==="Filter" ||value.removedValue) {
+          //console.log("SH",selectedHier2)
+          if((e==="Filter" ||value.removedValue) && searchData.HIER3.length>0 ) {
+            //console.log(123)
             handleHier3("Filter",UniqClass)
-          }    
+          }
+          if(e!=="Filter" ){
+            setSearchData((prev) => {
+              return {
+                ...prev,
+                HIER2: selectedHier2,
+              };
+            });    
+          }  
+          var filter_rem1=selectedHier2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        searchData.HIER2)
+          
+          var filter_rem2=searchData.HIER2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        selectedHier2)
+        ////console.log("wew",elmts)
+        if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+          var temp=[];
+          filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+          //console.log("wew",temp)
+          for (var i = 0; i < temp.length; i++)
+          {//console.log("Afvsd")
+            const index =  searchData.HIER2.indexOf(temp[i]);
+            if (index > -1) {
+            searchData.HIER2.splice(index, 1);}
+            //console.log("searchData.HIER2",searchData.HIER2)
+          }
+        }
+     
+        
     }else {
       setsubFilterClass([]);
       setFilterItem([]);
@@ -776,6 +857,7 @@ const handleHier2=(e,value) =>
       });
   }
 }
+
 const handleHier3=(e,value) =>
   {
     if (e==="Filter"){
@@ -802,6 +884,14 @@ const handleHier3=(e,value) =>
     
     }else if(value.action==="clear"){      
       valH3.splice(0,valH3.length);
+      valItem.splice(0,valItem.length);
+      setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
     }
 //manual input handle input and filter itemdata
 if(e===0){
@@ -818,12 +908,36 @@ if(e===0){
             valH3.map((item) => {
               selectedHier3.push(item.HIER3);
             });
-            setSearchData((prev) => {
-              return {
-                ...prev,
-                HIER3: selectedHier3,
-              };
-            });            
+            if(e!=="Filter" ){
+              setSearchData((prev) => {
+                return {
+                  ...prev,
+                  HIER3: selectedHier3,
+                };
+              });    
+            }  
+            var filter_rem1=selectedHier3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          searchData.HIER3)
+            
+            var filter_rem2=searchData.HIER3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          selectedHier3)
+          ////console.log("wew",elmts)
+          if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+            var temp=[];
+            filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+            //console.log("wew",temp)
+            for (var i = 0; i < temp.length; i++)
+            {//console.log("Afvsd")
+              const index =  searchData.HIER3.indexOf(temp[i]);
+              if (index > -1) {
+              searchData.HIER3.splice(index, 1);}
+              //console.log("searchData.HIER3",searchData.HIER3)
+            }
+          }
       }else {
         setFilterItem([]);
         setSearchData((prev) => {
@@ -881,12 +995,13 @@ if (valItem.length >0) {
   });
 }
 }
+//console.log("searchData",searchData,valH2)
 const selectLocation = (event, value) => {
   let selectedLocation = [];
   if (value.option) {     
         valLoc.push(value.option);
         // if (value.option.LOCATION===parseInt(inputLoc)){ 
-        //   //console.log(1234)
+        //   ////console.log(1234)
         //   setInputLoc("");
         // }
         if (String(value.option.LOCATION).includes(inputLoc)){
@@ -939,9 +1054,9 @@ const selectLocation = (event, value) => {
 
 
    const selectError = (event, value) => {
-    //console.log("ddd",event,value)
+    ////console.log("ddd",event,value)
     let selectedError = [];
-    ////console.log(value)
+    //////console.log(value)
     if(typeof value != "string"){
     if (value.option) {
       valErr.push(value.option.value)
@@ -965,7 +1080,7 @@ const selectLocation = (event, value) => {
     }
   }
   
-    ////console.log(valErr)
+    //////console.log(valErr)
     if(event===0){
       valErr.push(value)
     }
@@ -1042,7 +1157,7 @@ const selectLocation = (event, value) => {
     }
    
   }
-  ////console.log("searchData",searchData)
+  //////console.log("searchData",searchData)
   let UniqDept =
     itemData.length > 0
       ? [...new Map(itemData.map((item) => [item["HIER1"], item])).values()]
@@ -1229,7 +1344,7 @@ const selectLocation = (event, value) => {
             type="text"
             sx={{ width: 250 }}
             onChange={onChange}
-            value={searchData.USER}
+            value={searchData.CREATE_ID}
             //default_user={JSON.parse(localStorage.getItem("userData"))?.username}
           />
           <TextField
@@ -1274,7 +1389,7 @@ const selectLocation = (event, value) => {
       </Grid>
     </Box>
   );
-
+////console.log("tabledata",tabledata)
   return (
     <Box className={ErrorProceesClasses.maindiv}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -1333,6 +1448,12 @@ const selectLocation = (event, value) => {
           <Table
             tableData={tabledata}
             //handleDelete={handleDelete}
+            setAllData={setAllData}
+            inputValue={inputValue}
+            tabledataclone={allData}
+            setTabledataclone={setTabledataclone}
+            setInputValue={setInputValue}
+            setSearched={setSearched}
             handleSearch={handleChange}
             handleSearchClick={handleSearchColumn}
             handleCopyDown={handleCopyDown}

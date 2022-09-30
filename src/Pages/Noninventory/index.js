@@ -73,7 +73,7 @@ const NonInventory = () => {
   const [filterData, setFilterData] = useState("");
   const [isValidExcel, setIsValidExcel] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState();
+  const [inputValue, setInputValue] = useState("");
   const [allData, setAllData] = useState("");
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -82,6 +82,7 @@ const NonInventory = () => {
   const [errmsg, setErrormsg] = useState("");
   const [freeze, setFreeze] = useState(false);
   const theme = useTheme();
+  const [tabledataclone, setTabledataclone] = useState("");
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const StageProceesClasses = useStyles();
   const StagingProcessing = useSelector(
@@ -96,14 +97,7 @@ const NonInventory = () => {
     // Column Filter of table
   useEffect(() => {
     if (inputValue && freeze === false) {
-      //console.log(inputValue);
-      // const filteredTable = tabledata.filter((val) => Object.keys().map((item) => {
-      //     if(val[item] !== undefined && inputValue[item] !== undefined){
-      //         return val[item]?.toString().toLowerCase().includes(inputValue[item]?.toString().toLowerCase())   
-      //      }
-      //     })
-      // );
-      const filteredTable = tabledata.filter(props => 
+      const filteredTable = tabledataclone.filter(props => 
         Object
           .entries(inputValue)
           .every(([key,val]) => 
@@ -171,6 +165,14 @@ const NonInventory = () => {
             item['TOTAL_RETAIL'] = (item['QTY'] * item['UNIT_RETAIL']).toFixed(4);
             count++;
         })
+        formatData.filter((val) => {
+          // console.log("vale","   ",val)
+          for (const [key, value] of Object.entries(val)) {
+            if(value==="NaN"){
+              val[key]=""
+            }
+          }
+      })
         setTabledata(serializedata(formatData));
         setAllData(serializedata(formatData));
       } else {
@@ -284,11 +286,24 @@ const NonInventory = () => {
     } else setTabledata(allData);
   }, [searched]);
 
-  const resetFilter = () => {
-    setSearched("");
-    setInputValue("");
-    setTabledata(allData);
-  }
+
+  // console.log("outside tabledata",tabledata)
+  // console.log("outside tabledataclone",tabledataclone)
+  // const resetFilter = () => {
+  //   setSearched("");
+  //   setInputValue("");
+  //   // console.log("tabledata",tabledata)
+  //   // console.log("tabledataclone",tabledataclone)
+  //   if (inputValue.length===0){
+  //     console.log("if:")
+  //   setTabledata(tabledata);
+  //   setAllData(tabledata);
+  //   }else{
+  //     console.log("else:")
+  //   setTabledata(tabledataclone);
+  //   setAllData(tabledataclone);
+  //   }
+  // }
 
   const handleSearchColumn = (e) => {
     ////console.log("Handle Search Column",e);
@@ -329,6 +344,7 @@ const NonInventory = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
@@ -393,6 +409,11 @@ const NonInventory = () => {
            <Grid item xs={11} style={{ paddingLeft:"40px"}}>
         <Table
           tableData={tabledata}
+          setTabledataclone={setTabledataclone}
+          tabledataclone={allData}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          setSearched={setSearched}
           setTabledata={setTabledata}
           handleSearch={handleChange}
           searchText={inputValue}
@@ -402,11 +423,11 @@ const NonInventory = () => {
           pageName = "stage"
         />
         </Grid>
-        <Grid item xs={1} style={{ paddingLeft:"0px"}}>
+        {/* <Grid item xs={1} style={{ paddingLeft:"0px"}}>
         <IconButton className={StageProceesClasses.resetBtn} onClick={resetFilter}>
         <RestartAltIcon />
 </IconButton>
-        </Grid>
+        </Grid> */}
         </Grid>
       )}
       <Stack spacing={2} sx={{ width: "100%" }}>

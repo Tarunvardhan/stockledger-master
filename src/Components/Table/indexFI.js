@@ -74,6 +74,13 @@ export default function EnhancedTable({
   pageName,
   handleSearchClick,
   freeze,
+  setDeleteId,
+  setAllData,
+  setInputValue,
+  setSearched,
+  setTabledataclone,
+  tabledataclone,
+  inputValue,
 }) {
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -127,12 +134,22 @@ export default function EnhancedTable({
   const handleDelete = () => {
     const id = selected;
     const data = [...tableData];
-    //console.log("data",data);
     const updatedTable = data.filter((val) => {
       return !id.includes(val.SR_NO);
-    });
-    setTabledata(updatedTable);
+  });
+  const data1 = [...tabledataclone];
+    const updatedTabledata = data1.filter((val) => {
+      return !id.includes(val.SR_NO);
+  });
+  // console.log("updatedTable",updatedTable)
+  // console.log("updatedTabledata",updatedTabledata)
+  // console.log("tableData123",tableData)
+  // console.log("tabledataclone",tabledataclone)
+    setTabledata(updatedTable)
+    setTabledataclone(updatedTabledata)
+    setAllData(updatedTabledata);
     setSelected([]);
+    setDeleteId(id);
   };
 
   const handleChangePage = (event, newPage) => {

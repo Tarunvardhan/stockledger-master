@@ -93,6 +93,7 @@ const CostChange = () => {
   const [isSubmit, setSubmit] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [open, setOpen] = useState(false);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -144,6 +145,7 @@ const CostChange = () => {
              newTabledata.push(test); 
          
      })
+     setTabledataclone(newTabledata)
      return newTabledata;
    } 
    setLoading(true);
@@ -151,7 +153,7 @@ const CostChange = () => {
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter(props => 
+      const filteredTable = tabledataclone.filter(props => 
         Object
           .entries(inputValue)
           .every(([key,val]) => 
@@ -248,6 +250,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
     setSearch(true);
     setState({ ...state, 'right': open });
+    setInputValue("");
 }
 
 

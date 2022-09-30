@@ -118,7 +118,10 @@ const SystemConfig = () => {
   const [isSubmit, setSubmit] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [open, setOpen] = useState(false);
+  const [searched, setSearched] = useState();
   const [valTrnType,setValTrnType]=useState([]);
+  const [editSelect,setEditSelect] = useState([]);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const [load, setLoad] = useState(0);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -174,13 +177,14 @@ const SystemConfig = () => {
             let test = Object.assign(reorder,item);
             newTabledata.push(test); 
     })
+    setTabledataclone(newTabledata)
     return newTabledata;
   } 
   }
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter(props => 
+      const filteredTable = tabledataclone.filter(props => 
         Object
           .entries(inputValue)
           .every(([key,val]) => 
@@ -270,6 +274,7 @@ useEffect(() => {
 
   ////console.log("asdasds",searchData)
   const handleChange = (e) => {
+    console.log("e:",e)
     const { name, value } = e.target;
     if (value == "") {
       setInputValue(prevState => ({
@@ -293,7 +298,9 @@ useEffect(() => {
 const handleClose = () => {
   setOpen(false);
 }
-
+const tableSearch = (event) => {
+  setSearched(event.target.value);
+}
 const confirmSubmit = () => {
   setOpen(true);
 }
@@ -362,12 +369,21 @@ const handleSubmit = (event) => {
   };
 
 const handleSearchColumn = (e) => {
-  ////console.log("Handle Search Column",e);
+  // console.log("Handle Search Column",e);
 
   //console.log(inputValue);
   setFreeze(true);
-
+  // if (editSelect.length>0){
+  //   console.log("13243:")
+  //   setFreeze(false);
+  // }
+  // else{
+  //   console.log("9877665:")
+  // setFreeze(true);
+  // }
 }
+
+// console.log("editSelect:",editSelect)
 
 const handleCopyDown = (e) => {
   ////console.log("Handle Copy Down",e);
@@ -382,7 +398,7 @@ const handleCopyDown = (e) => {
   for(const key in inputValue){
       if(inputValue[key] === ''){
         delete inputValue[key];
-        //console.log("k",key);
+        console.log("k",key);
       }
       if(inputValue.hasOwnProperty('TRN_NAME')){
         delete inputValue['TRN_NAME'];
@@ -412,17 +428,6 @@ setInputValue("");
 }
 
 }
-const navigate = useNavigate();
-const [isOpen, setIsOpen] = useState(false);
-const handleDrawerClose = () => {
-  setOpen(false);
-  setIsOpen(false);
-};
-const closeMenuBar = () => {
-  //console.log("g8ggvigdi")
-  navigate("/system-config");
-  handleDrawerClose()
-}
 
 const onReset = (event) => {
 
@@ -431,12 +436,15 @@ const onReset = (event) => {
     initialsearch.TRN_NAME = [];
     ////console.log('datainitial',initialsearch);
       setSearchData(initialsearch)
+      seteditRows([]);
+      setFreeze(false);
       ////console.log('data',searchData);
       setSearch(false);
       setTabledata("");
       setInputValue("");
       setValTrnType([]);
       setInputTrn("")
+      setEditSelect([]);
       dispatch(resetSystemConfig());
 }
 const selectTrantype=(e,value) =>{
@@ -554,7 +562,7 @@ const searchPanel = () => (
               type="submit"
               variant="contained"
               sx={{ width:'120px'}}
-              startIcon={<SearchIcon  onClick={closeMenuBar} disableRipple sx={{padding:"0px"}}/>}
+              startIcon={<SearchIcon />}// onClick={closeMenuBar} disableRipple sx={{padding:"0px"}}/>}
             >
               Search
             </Button>
@@ -574,12 +582,12 @@ const searchPanel = () => (
 
   return (
     
-    <Box className={ErrorProceesClasses.maindiv} >
+    <Box className={ErrorProceesClasses.maindiv}>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={6}>
           <Box className={ErrorProceesClasses.boxDiv} >
             <div className={ErrorProceesClasses.uploaddiv}>
-              <h4 className={ErrorProceesClasses.screenLabel}>System Config</h4>
+              <h4 className={ErrorProceesClasses.screenLabel}>System Config Maintenance</h4>
             </div>
           </Box>
         </Grid>
@@ -615,6 +623,12 @@ const searchPanel = () => (
         <Table
           tableData={tabledata}
           //handleDelete={handleDelete}
+          inputValue={inputValue}
+          setTabledataclone={setTabledataclone}
+          tabledataclone={allData}
+          setInputValue={setInputValue}
+          setSearched={setSearched}
+          setTabledata={setTabledata}
           handleSearchClick={handleSearchColumn}
           handleCopyDown={handleCopyDown}
           handleSearch={handleChange}
@@ -624,9 +638,11 @@ const searchPanel = () => (
           seteditRows={seteditRows}
           setUpdateRow={setUpdateRow}
           headCells={headCells}
-          setTabledata={setTabledata}
           allData={allData}
+          setAllData={setAllData}
           freeze={freeze}
+          setFreeze={setFreeze}
+          setEditSelect={setEditSelect}
           pageName="config"
         />
       )}

@@ -12,6 +12,7 @@ import glcreationReducers from "./glcreationReducers";
 import FinanceInterfaceReducers from "./financeInterfaceReducer";
 import DailyViewReducers from "./DailyViewReducers";
 import SubLedgerCostReducers from "./subLedgerCostReducers";
+import sysconfigcreationReducers from "./SysConfigCreationReducers";
 
 const rootReducer = combineReducers({
   StagingProcessingReducers,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   FinanceInterfaceReducers,
   DailyViewReducers,
   SubLedgerCostReducers,
+  sysconfigcreationReducers,
 });
 
 export default rootReducer;

@@ -25,4 +25,6 @@ export const API = {
   FETCHTRNTYPELIST: "/trn_type_dtl_list/",
   FETCHDAILYVIEW:"/Daily_view/",
   FETCHSUBLEDGERCOST:"/subledger_cost/",
+  CREATESYSCONF:"/system_config_creation/",
+  FETCHGLPRIMARY:"/primary_gl/",
 };

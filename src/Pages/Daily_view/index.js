@@ -77,6 +77,7 @@ const DailyView = () => {
   const [isSubmit, setSubmit] = useState(false);
   const [open, setOpen] = useState(false);
   const [freeze, setFreeze] = useState(false);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   
@@ -129,6 +130,7 @@ const DailyView = () => {
              //console.log("tabledata",newTabledata)
           
      })
+     setTabledataclone(newTabledata)
      return datatable;
    } 
    setLoading(true);
@@ -136,7 +138,7 @@ const DailyView = () => {
    
   useEffect(() => {
     if (inputValue  && freeze === false) {
-      const filteredTable = tabledata.filter(props => 
+      const filteredTable = tabledataclone.filter(props => 
         Object
           .entries(inputValue)
           .every(([key,val]) => 
@@ -228,6 +230,7 @@ const handleSubmit = (event) => {
   event.preventDefault();
     setSearch(true);
     setState({ ...state, 'right': open });
+    setInputValue("");
 }
 
 

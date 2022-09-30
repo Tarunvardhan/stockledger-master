@@ -25,6 +25,7 @@ import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { components } from "react-select";
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
+import { ContactSupportOutlined } from "@mui/icons-material";
 
 //import "./index.css";
 
@@ -118,6 +119,7 @@ const SubLedgerCost = () => {
   const [inputLoc,setInputLoc] = useState("");
   const [valH1,setValH1]=useState([]);
   const [valLoc,setValLoc]=useState([]);
+  const [tabledataclone, setTabledataclone] = useState("");
   const [load, setLoad] = useState(0);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -172,6 +174,7 @@ const SubLedgerCost = () => {
              newTabledata.push(test); 
          
      })
+     setTabledataclone(newTabledata)
      return newTabledata;
    } 
    setLoading(true);
@@ -179,7 +182,7 @@ const SubLedgerCost = () => {
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter(props => 
+      const filteredTable = tabledataclone.filter(props => 
         Object
           .entries(inputValue)
           .every(([key,val]) => 
@@ -191,15 +194,16 @@ const SubLedgerCost = () => {
     }
   }, [inputValue]);
 
-  // //console.log("infilter:",inputValue)
-  // //console.log("tabledata:",tabledata)
+console.log("searchData:",searchData)
+console.log("tabledata:",tabledata)
+console.log("allData:",allData)
 
   useEffect(() => {
     if (SubLedgerCostData.isError) {
       ////console.log("hello",SubLedgerCostData["messgae"])
 
       setIsError(true);
-      console.log("chgscyu",SubLedgerCostData)
+      // console.log("chgscyu",SubLedgerCostData)
       swal(
         <div>     
           <p>{SubLedgerCostData["message"]}</p>
@@ -232,9 +236,20 @@ const SubLedgerCost = () => {
 
 useEffect(() => {
   if(isSearch){
+    setSearch(false);
     dispatch(getSubLedgerCostRequest([searchData])) 
   }
 },[isSearch])
+
+console.log("isSearch",isSearch)
+useEffect(() => {
+  if (isSubmit) {
+    setSearch(false);
+    setTimeout(() => {
+      dispatch(getSubLedgerCostRequest([searchData]));
+    }, 500);
+  }
+}, [isSubmit]);
 
 useEffect(() => {
   setLoading(true);
@@ -372,6 +387,7 @@ const onReset = (event) => {
   setInputLoc("");
   setValH1([]);
   setValLoc([]);
+  seteditRows([]);
   setTabledata("");
   setInputValue("");
   setAllData("");
@@ -570,7 +586,7 @@ const selectLocation = (event, value) => {
             type="text"
             sx={{ width: 250 }}
             onChange={onChange}
-            value={searchData.user}
+            value={searchData.AMOUNT}
             //default_user={JSON.parse(localStorage.getItem("userData"))?.username}
           />
      <div>

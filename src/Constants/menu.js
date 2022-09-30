@@ -24,6 +24,16 @@ export const GetItems = () => {
         id: 1,
         name: "System Config",
         icon: <SettingsSuggestIcon sx={{color: "#b4b4b4"}}/>,
+        subitems: [
+          {
+            id: 1,
+            name: "System Config Maintenance",
+            },
+          {
+            id: 2,
+            name: "System Config Creation",
+            }, 
+        ],
       },
       {
         id: 2,
@@ -33,17 +43,17 @@ export const GetItems = () => {
           {
             id: 1,
             name: "Download",
-            icon: <DownloadIcon sx={{color: "#b4b4b4"}}/>,
+            // icon: <DownloadIcon sx={{color: "#b4b4b4"}}/>,
           },
           {
             id: 2,
             name: "Upload Inventory",
-            icon: <UploadIcon sx={{color: "#b4b4b4"}}/>,
+            // icon: <UploadIcon sx={{color: "#b4b4b4"}}/>,
           },
           {
             id: 3,
             name: "Upload Non Inventory",
-            icon: <UploadIcon sx={{color: "#b4b4b4"}}/>,
+            // icon: <UploadIcon sx={{color: "#b4b4b4"}}/>,
           },
         ],
       },
@@ -145,9 +155,7 @@ export const GetItems = () => {
           {
             id: 1,
             name: "Stock Ledger View",
-            },
-
-            
+            },   
         ],
       },
     ],

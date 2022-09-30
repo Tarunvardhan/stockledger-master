@@ -112,7 +112,6 @@ const CostChange = () => {
   const [inputH3, setInputH3] = useState("");
   const [inputItem, setInputItem] = useState("");
   const [inputLoc, setInputLoc] = useState("");
-  //inputval
   const [valLoc, setValLoc] = useState([]);
   const [valH1,setValH1]=useState([]);
   const [valH2,setValH2]=useState([]);
@@ -132,11 +131,13 @@ const CostChange = () => {
   const [loading, setLoading] = useState(false);
   const [isSearch, setSearch] = useState(false);
   const [searchData, setSearchData] = useState(initialsearch);
+  const [searched, setSearched] = useState();
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
   const [freeze, setFreeze] = useState(false);
   const [open, setOpen] = useState(false);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [load, setLoad] = useState(0);
@@ -156,6 +157,8 @@ const CostChange = () => {
   useEffect(() => {
     document.title = 'Cost Maintanence';
   },[]);
+
+  //console.log("tabledata:",tabledata,"allData:",allData)
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -184,13 +187,16 @@ const CostChange = () => {
         // initialsearch.LOCATION = [];
         // setSearchData(initialsearch)
       })
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   }
 
+  // console.log(1234,CostChangeData?.data?.Data,"sdddsdsdsd",Array.isArray(CostChangeData?.data?.Data))
+
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter(props =>
+      const filteredTable = tabledataclone.filter(props =>
         Object
           .entries(inputValue)
           .every(([key, val]) =>
@@ -264,6 +270,7 @@ const CostChange = () => {
       setTabledata(serializedata(CostChangeData?.data?.Data));
       setAllData(serializedata(CostChangeData?.data?.Data));
      }
+    //  console.log("Data",Data)
       setLoading(false);
       setSubmit(false);
       setSearch(false);
@@ -443,8 +450,10 @@ if (check===1){
     setFilterClass([]);
     setsubFilterClass([]);
     setFilterItem([]);
+    seteditRows([]);
     setSearch(false);
     setTabledata("");
+    setInputValue("");
   }
 
   const handleSearchColumn = (e) => {
@@ -515,7 +524,32 @@ if (check===1){
       }
      valH1.splice(index,1);
     }else if(value.action==="clear"){ 
-        valH1.splice(0,valH1.length);
+        valH1.splice(0,valH1.length);        
+        valH2.splice(0,valH2.length);       
+        valH3.splice(0,valH3.length);       
+        valItem.splice(0,valItem.length);
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER2: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
+
     }
 //manual input handle input and filter itemdata
   if(e===0){
@@ -546,7 +580,7 @@ if (check===1){
               };
               
             });     
-      if(value.removedValue){
+      if(value.removedValue && searchData.HIER2.length>0){
         handleHier2("Filter",UniqClass)
       }
     }else {
@@ -562,14 +596,16 @@ if (check===1){
     }
 }
 const handleHier2=(e,value) =>
-  {
+  { let selectedHier2 = [];
     if (e==="Filter"){
        valH2.splice(0,valH2.length);
        valH2.push(...value);
     }
-    let selectedHier2 = [];
-    if (value){
+    
+
+    if (value && e!=="Filter"){
       if (value.option) {
+        //console.log(123)
         valH2.push(value.option)
         if ((value.option.HIER2).includes(inputH2)){
           setInputH2("");
@@ -588,6 +624,23 @@ const handleHier2=(e,value) =>
     
       }else if(value.action==="clear"){      
         valH2.splice(0,valH2.length);
+        valH3.splice(0,valH3.length);
+        valItem.splice(0,valItem.length);
+
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            HIER3: [],
+          };
+          
+        });
+        setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
       }
     }
 //manual input handle input and filter itemdata
@@ -597,7 +650,7 @@ const handleHier2=(e,value) =>
   //console.log("filter",valH2)
 //Filtering HIER2 based on HIER1
   if (valH2.length >0) {
-    //console.log(1232)
+    ////console.log(1232)
     const filterSubClass = itemData.filter((item) => {      
       return (valH2).some((val) => {
         return item.HIER2 === val.HIER2;
@@ -615,15 +668,43 @@ const handleHier2=(e,value) =>
           valH2.map((item) => {
             selectedHier2.push(item.HIER2);
           });
-          setSearchData((prev) => {
-            return {
-              ...prev,
-              HIER2: selectedHier2,
-            };
-          });    
-          if(e==="Filter" ||value.removedValue) {
+          //console.log("SH",selectedHier2)
+          if((e==="Filter" ||value.removedValue) && searchData.HIER3.length>0 ) {
+            //console.log(123)
             handleHier3("Filter",UniqClass)
-          }    
+          }
+          if(e!=="Filter" ){
+            setSearchData((prev) => {
+              return {
+                ...prev,
+                HIER2: selectedHier2,
+              };
+            });    
+          }  
+          var filter_rem1=selectedHier2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        searchData.HIER2)
+          
+          var filter_rem2=searchData.HIER2.filter(function(i) {
+            return this.indexOf(i) < 0;
+        },
+        selectedHier2)
+        ////console.log("wew",elmts)
+        if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+          var temp=[];
+          filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+          //console.log("wew",temp)
+          for (var i = 0; i < temp.length; i++)
+          {//console.log("Afvsd")
+            const index =  searchData.HIER2.indexOf(temp[i]);
+            if (index > -1) {
+            searchData.HIER2.splice(index, 1);}
+            //console.log("searchData.HIER2",searchData.HIER2)
+          }
+        }
+     
+        
     }else {
       setsubFilterClass([]);
       setFilterItem([]);
@@ -635,6 +716,7 @@ const handleHier2=(e,value) =>
       });
   }
 }
+
 const handleHier3=(e,value) =>
   {
     if (e==="Filter"){
@@ -661,6 +743,14 @@ const handleHier3=(e,value) =>
     
     }else if(value.action==="clear"){      
       valH3.splice(0,valH3.length);
+      valItem.splice(0,valItem.length);
+      setSearchData((prev) => {
+          return {
+            ...prev,
+            ITEM: [],
+          };
+          
+        });
     }
 //manual input handle input and filter itemdata
 if(e===0){
@@ -677,12 +767,36 @@ if(e===0){
             valH3.map((item) => {
               selectedHier3.push(item.HIER3);
             });
-            setSearchData((prev) => {
-              return {
-                ...prev,
-                HIER3: selectedHier3,
-              };
-            });            
+            if(e!=="Filter" ){
+              setSearchData((prev) => {
+                return {
+                  ...prev,
+                  HIER3: selectedHier3,
+                };
+              });    
+            }  
+            var filter_rem1=selectedHier3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          searchData.HIER3)
+            
+            var filter_rem2=searchData.HIER3.filter(function(i) {
+              return this.indexOf(i) < 0;
+          },
+          selectedHier3)
+          ////console.log("wew",elmts)
+          if(filter_rem1.length>0 ||filter_rem2.length>0 ){
+            var temp=[];
+            filter_rem1.length>0?temp=[...filter_rem1]:temp=[...filter_rem2]
+            //console.log("wew",temp)
+            for (var i = 0; i < temp.length; i++)
+            {//console.log("Afvsd")
+              const index =  searchData.HIER3.indexOf(temp[i]);
+              if (index > -1) {
+              searchData.HIER3.splice(index, 1);}
+              //console.log("searchData.HIER3",searchData.HIER3)
+            }
+          }
       }else {
         setFilterItem([]);
         setSearchData((prev) => {
@@ -1035,6 +1149,12 @@ const selectLocation = (event, value) => {
           setTabledata={setTabledata}
           allData={allData}
           freeze={freeze}
+          setTabledataclone={setTabledataclone}
+          tabledataclone={allData}
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          setSearched={setSearched}
+          setAllData={setAllData}
           pageName="cost_maintenance"
         />
       )}

@@ -57,6 +57,12 @@ const CommonTable = ({
   handleSearchClick,
   freeze,
   handleCopyDown,
+  tableData,
+  setAllData,
+  tabledataclone,
+  setInputValue,
+  inputValue,
+  setSearched,
 }) => {
 
 
@@ -157,6 +163,13 @@ const CommonTable = ({
               freeze={freeze}
               handleCopyDown={handleCopyDown}
               pageName={pageName}
+              tableData={tableData}
+              setTabledata={setTabledata}
+              setAllData={setAllData}
+              tabledataclone={tabledataclone}
+              inputValue={inputValue}
+              setInputValue={setInputValue}
+              setSearched={setSearched}
             />
             <TableBody>
               {stableSort(rows, getComparator(order, orderBy))

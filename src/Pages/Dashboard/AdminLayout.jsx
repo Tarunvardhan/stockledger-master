@@ -94,7 +94,7 @@ const Drawer = styled(MuiDrawer, {
     ...openedMixin(theme),
     "& .MuiDrawer-paper": {
       width: "310px",
-      backgroundColor: "#f9f9f9"
+      // backgroundColor: "#f9f9f9"
     },
   }),
   ...(!open && {
@@ -180,14 +180,17 @@ export default function Index() {
     if (routeName === "Account creation") {
       navigate("/ACCOUNT-CREATION");
     }
+    if (routeName == "System Config Maintenance") {
+      navigate(`/system-config-maintenance`);
+    }
+    if (routeName == "System Config Creation") {
+      navigate(`/system-config-creation`);
+    }
     handleDrawerClose()
   };
   const handleHomePage = (routedata) => {
     if (routedata == "Home") {
       navigate(`/dashboard`);
-    }
-    if (routedata == "System Config") {
-      navigate(`/system-config`);
     }
   };
   const handleClick = (index) => {
@@ -202,7 +205,7 @@ export default function Index() {
     handleClick(index);
     handleHomePage(itemData?.name);
    // //console.log("open",open);
-    if(itemData?.id !== 0 && itemData?.id !== 1){
+    if(itemData?.id !== 0 ){
       handleDrawerOpen()
     }else{
     setOpen(!open);
@@ -310,11 +313,12 @@ export default function Index() {
                             unmountOnExit
                             key={dataSet.name}
                           >
-                            <List component="div" sx={{ marginLeft: "35px" , bgcolor: "grey"}}>
+                            <List component="div" sx={{ marginLeft: "-5px" , bgcolor: "grey"}}>
                               <ListItemButton
                                 sx={{ pl: 4 }}
                                 onClick={() => {
                                   handleNavigation(dataSet.name);
+                                  // setTimeout(() => window.location.reload(),10)
                                 }}
                               >
                                 <ListItemIcon>

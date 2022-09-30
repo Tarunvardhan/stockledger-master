@@ -136,12 +136,14 @@ const GlAccount = () => {
   const [loading, setLoading] = useState(false);
   const [isSearch, setSearch] = useState(false);
   const [searchData, setSearchData] = useState(initialsearch);
+  const [searched, setSearched] = useState();
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isSubmit, setSubmit] = useState(false);
   const [open, setOpen] = useState(false);
   const [valCurr,setValCurr]=useState([]);
   const [freeze, setFreeze] = useState(false);
+  const [tabledataclone, setTabledataclone] = useState("");
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [state, setState] = React.useState({
@@ -192,13 +194,14 @@ const GlAccount = () => {
         let test = Object.assign(reorder, item);
         newTabledata.push(test);
       });
+      setTabledataclone(newTabledata)
       return newTabledata;
     }
   };
 
   useEffect(() => {
     if (inputValue && freeze === false) {
-      const filteredTable = tabledata.filter((props) =>
+      const filteredTable = tabledataclone.filter((props) =>
         Object.entries(inputValue).every(
           ([key, val]) =>
             !val.length ||
@@ -384,9 +387,11 @@ const GlAccount = () => {
     setsubFilterClass([]);
     setFilterItem([]);
     setValCurr([]);
+    seteditRows([]);
     //console.log("data", searchData);
     setSearch(false);
     setTabledata("");
+    setInputValue("");
   };
 
   const handleSearchColumn = (e) => {
@@ -610,7 +615,7 @@ const GlAccount = () => {
         <Grid item xs={6}>
           <Box className={GlAccountClasses.boxDiv}>
             <div className={GlAccountClasses.uploaddiv}>
-              <h4>GL Account Data</h4>
+              <h4>Account Maintanence</h4>
             </div>
           </Box>
         </Grid>
@@ -674,6 +679,12 @@ const GlAccount = () => {
             setTabledata={setTabledata}
             allData={allData}
             freeze={freeze}
+            setTabledataclone={setTabledataclone}
+            tabledataclone={allData}
+            inputValue={inputValue}
+            setInputValue={setInputValue}
+            setSearched={setSearched}
+            setAllData={setAllData}
             pageName="gl_account"
           />
         )
